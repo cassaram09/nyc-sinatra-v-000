@@ -10,13 +10,18 @@ class FiguresController < ApplicationController
     erb :'/figures/new'
   end
 
-  post '/figures' do
-    @figure = Figure.create(name: params[:figure][:name])
-    
-    create_or_update_landmark(params[:figure][:landmark_ids], params[:landmark][:name])
-    create_or_update_title(params[:figure][:title_ids], params[:title][:name])
+  post '/figures' do    
+    @figure = Figure.create(params["figure"])
+      if !params[:landmark][:name].empty?
+        @figure.landmarks << Landmark.find_or_create_by(params[:landmark])
+      end
 
-    @figure.save
+      if !params[:title][:name].empty?
+        @figure.titles << Title.find_or_create_by(params[:title])
+      end
+      
+      @figure.save
+      redirect to "/figures/#{@figure.id}"
 
     redirect "/figures/#{@figure.id}"
   end
@@ -43,37 +48,6 @@ class FiguresController < ApplicationController
     @figure.save
     
     redirect "/figures/#{@figure.id}"
-  end
-
-   helpers do
-    def create_or_update_landmark(existing_property, new_property)
-      if existing_property
-        existing_property.each do |id|
-          @figure.landmarks << Landmark.find_by(id: id)
-        end
-      end
-
-      @figure.save
-
-      if new_property != "" 
-        @figure.landmarks << Landmark.find_or_create_by(name: new_property)
-      end
-    end
-
-    def create_or_update_title(existing_property, new_property)
-      if existing_property
-        existing_property.each do |id|
-          @figure.titles << Title.find_by(id: id)
-        end
-      end
-
-      @figure.save
-      
-      if new_property != "" 
-        @figure.titles << Title.find_or_create_by(name: new_property)
-      end
-    end
-
   end
 
 end
