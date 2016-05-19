@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe LandmarksController do
+describe "LandmarksController" do
   before do
     queenb = Figure.create(:name => "Beyonce")
     bqe = Landmark.create(name: 'BQE', year_completed: 1961)

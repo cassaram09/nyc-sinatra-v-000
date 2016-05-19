@@ -3,8 +3,8 @@ require 'spec_helper'
 describe "Figure" do
   before do 
     @figure = Figure.create(:name => "Fiorello LaGuardia") 
-
-    @airport =  Landmark.create(:name => "LG Airport") 
+    @airport =  Landmark.create(:name => "LG Airport", :year_completed => 1950) 
+    
     @library = Landmark.create(:name => "Library")
 
     @mayor = Title.create(:name => "Mayor")
